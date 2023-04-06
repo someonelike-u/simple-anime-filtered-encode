@@ -2,7 +2,7 @@
 Just change 3 parameters here.
 """
 
-file = r'v1.mkv'
+file = r'fileName.mkv'
 nativeHeight = 837 # Use getNative python module
 creditRanges = [(0, 1), (2, 3)] # --> From frame 0 to frame 1, from frame 2 to frame 3, etc.
 
