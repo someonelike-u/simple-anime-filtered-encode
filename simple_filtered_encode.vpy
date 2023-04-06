@@ -59,5 +59,4 @@ def filter():
 	grain = grainProcess(deband)
 	return maskCreditProcess(grain, creditRanges)
 
-src.set_output(0)
-filter().set_output(1)
+filter().set_output()
