@@ -3,8 +3,7 @@ A simple filtered encode for animes not in native 1080p production with vapoursy
 
 Pros:
 - Better than the source
-- Can be fast encode
-- Can work with decent animations
+- Can work mostly with decent animations
 
 Cons:
 - Cannot deal with big animation issues (big aliasing, big banding, etc.)
