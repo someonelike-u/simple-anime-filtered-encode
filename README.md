@@ -1,5 +1,5 @@
 # Simple filtered encode for animes
-A simple filtered encode for animes not in native 1080p production with vapoursynth
+A simple filtered encode for animes not in native 1080p production with vapoursynth r62
 
 Pros:
 - Better than the source
