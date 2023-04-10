@@ -19,7 +19,7 @@ from nnedi3_rpow2 import nnedi3_rpow2
 import havsfunc as haf
 from vsTAAmbk import TAAmbk
 import muvsfunc as muvf
-import lvsfunc as lvf
+import vstools as vstools
 
 core = vs.core
 src = core.lsmas.LWLibavSource(source=file)
@@ -49,7 +49,7 @@ def grainProcess(clip):
 
 def maskCreditProcess(clip, ranges: Optional[Tuple[int, int]] = None):
 	creditMask = depth(vdf.drm(depth(src16, 8), nativeHeight, thr=60, expand=6), 16)
-	fixCredits = lvf.rfs(clip, core.std.MaskedMerge(clip, src16, creditMask), ranges)
+	fixCredits = vstools.ranges.rfs(clip, core.std.MaskedMerge(clip, src16, creditMask), ranges)
 	return depth(fixCredits, 10)
 
 def filter():
