@@ -25,13 +25,16 @@ core = vs.core
 src = core.lsmas.LWLibavSource(source=file)
 src16 = depth(src, 16)
 
-def denoiseProcess(clip):
-	return kgf.hybriddenoise(depth(clip, 32), 0.45, 1.5)
+def denoiseProcess(clip, strongDenoise: bool = False):
+	clip = depth(clip, 32)
+	if strongDenoise == True:
+		return kgf.hybriddenoise(clip, 1.2, 5)
+	return kgf.hybriddenoise(clip, 0.45, 1.5)
 
-def rescaleProcess(clip):
+def rescaleProcess(clip, strongAA: bool = False):
 	luma = get_y(clip)
-	descale = kgf.inverse_scale(luma, height=nativeHeight, kernel='bicubic')
-	antiAliasing = TAAmbk(depth(descale, 16), aatype='Nnedi3')
+	descale = kgf.inverse_scale(luma, height=nativeHeight, kernel='bicubic
+	antiAliasing = TAAmbk(depth(descale, 16), aatype='Eedi3' if strongAA == True else 'Nnedi3')
 	upscale = nnedi3_rpow2(antiAliasing)
 	downscale = muvf.SSIM_downsample(upscale, 1920, 1080)
 	rescaled = vdf.misc.merge_chroma(depth(downscale, 16), src16)
@@ -39,8 +42,12 @@ def rescaleProcess(clip):
 	dering = haf.HQDeringmod(dehalo, mthr=24, nrmode=2, sharp=0, darkthr=0)
 	return dering
 
-def debandProcess(clip):
-	deband = core.neo_f3kdb.Deband(clip, y=32, cb=32, cr=32, grainy=0, grainc=0, keep_tv_range=True, output_depth=16)
+def debandProcess(clip, strongDeband: bool = False):
+	deband = None
+	if strongDeband == True:
+		deband = core.neo_f3kdb.Deband(clip, range=16, y=48, cb=48, cr=48, grainy=0, grainc=0, keep_tv_range=True, sample_mode=4, output_depth=16)
+	else:
+		deband = core.neo_f3kdb.Deband(clip, range=16, y=32, cb=32, cr=32, grainy=0, grainc=0, keep_tv_range=True, sample_mode=4, output_depth=16)
 	debandMask = kgf.retinex_edgemask(clip, sigma=2).std.Binarize(8500).std.Inflate()
 	return core.std.MaskedMerge(deband, clip, debandMask)
 
