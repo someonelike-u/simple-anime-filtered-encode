@@ -14,7 +14,6 @@ import vapoursynth as vs
 import kagefunc as kgf
 import vardefunc as vdf
 from vsutil import depth, get_y
-from typing import Tuple, Optional
 from nnedi3_rpow2 import nnedi3_rpow2
 import havsfunc as haf
 from vsTAAmbk import TAAmbk
@@ -54,7 +53,7 @@ def debandProcess(clip, strongDeband: bool = False):
 def grainProcess(clip):
 	return kgf.adaptive_grain(clip, static=False)
 
-def maskCreditProcess(clip, ranges: Optional[Tuple[int, int]] = None):
+def maskCreditProcess(clip, ranges = None):
 	creditMask = depth(vdf.drm(depth(src16, 8), nativeHeight, thr=60, expand=6), 16)
 	fixCredits = vstools.ranges.rfs(clip, core.std.MaskedMerge(clip, src16, creditMask), ranges)
 	return depth(fixCredits, 10)
