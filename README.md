@@ -9,7 +9,8 @@ You can download here [my portable vapoursynth pack](https://www.dropbox.com/s/u
 Here is a quick [comparison](https://slow.pics/c/uNrV6CMZ) of the results.
 
 Pros:
-- Using as few filters as possible and the least amount of power
+- Using the least greedy filters
+- Using as few filters as possible
 - The result should be better than the source
 - Can work mostly with decent animations
 
