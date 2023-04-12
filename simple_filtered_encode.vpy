@@ -32,7 +32,7 @@ def denoiseProcess(clip, strongDenoise: bool = False):
 
 def rescaleProcess(clip, strongAA: bool = False):
 	luma = get_y(clip)
-	descale = kgf.inverse_scale(luma, height=nativeHeight, kernel='bicubic
+	descale = kgf.inverse_scale(luma, height=nativeHeight, kernel='bicubic')
 	antiAliasing = TAAmbk(depth(descale, 16), aatype='Eedi3' if strongAA == True else 'Nnedi3')
 	upscale = nnedi3_rpow2(antiAliasing)
 	downscale = muvf.SSIM_downsample(upscale, 1920, 1080)
