@@ -8,6 +8,8 @@ You can download here [my portable vapoursynth pack](https://www.dropbox.com/s/u
 
 Here is a quick [comparison](https://slow.pics/c/uNrV6CMZ) of the results.
 
+*About me: Just a newbie in filtering, coding, etc.*
+
 Pros:
 - Using the least greedy filters
 - Using as few filters as possible
@@ -19,3 +21,4 @@ Cons:
 - Can introduce unexpected artefacts (rarely or not enough visible during playback)
 - Encode can be very slow
 - (I don't know what else)
+
