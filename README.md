@@ -1,7 +1,7 @@
 # Simple filtered encode for animes
 A simple filtered encode for animes not in native 1080p production with vapoursynth r62
 
-You can download here [my portable vapoursynth pack](https://www.dropbox.com/s/u024mm8e8fobr2o)
+You can download here [my portable vapoursynth pack](https://www.dropbox.com/s/u024mm8e8fobr2o) to test the encode
 
 Pros:
 - Better than the source
