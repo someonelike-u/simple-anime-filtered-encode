@@ -11,7 +11,6 @@ Here is a quick [comparison](https://slow.pics/c/uNrV6CMZ) of the results.
 Pros:
 - Using the least greedy filters
 - Using as few filters as possible
-- The result should be better than the source
 - Can work mostly with decent animations
 
 Cons:
