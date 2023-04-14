@@ -13,22 +13,22 @@ The following lines can be untouched.
 import vapoursynth as vs
 import kagefunc as kgf
 import vardefunc as vdf
-from vsutil import depth, get_y
+from vstools import depth, get_y, replace_ranges
 from nnedi3_rpow2 import nnedi3_rpow2
 import havsfunc as haf
 from vsTAAmbk import TAAmbk
 import muvsfunc as muvf
-import vstools as vstools
 
 core = vs.core
 src = core.lsmas.LWLibavSource(source=file)
 src16 = depth(src, 16)
 
 def denoiseProcess(clip, strongDenoise: bool = False):
-	clip = depth(clip, 32)
 	if strongDenoise == True:
-		return kgf.hybriddenoise(clip, 1.2, 5)
-	return kgf.hybriddenoise(clip, 0.45, 1.5)
+		denoise = kgf.hybriddenoise(clip, 1.2, 5)
+	else:
+		denoise = kgf.hybriddenoise(clip, 0.45, 1.5)
+	return denoise
 
 def rescaleProcess(clip, strongAA: bool = False):
 	luma = get_y(clip)
@@ -42,7 +42,6 @@ def rescaleProcess(clip, strongAA: bool = False):
 	return dering
 
 def debandProcess(clip, strongDeband: bool = False):
-	deband = None
 	if strongDeband == True:
 		deband = core.neo_f3kdb.Deband(clip, range=16, y=48, cb=48, cr=48, grainy=0, grainc=0, keep_tv_range=True, sample_mode=4, output_depth=16)
 	else:
@@ -55,13 +54,13 @@ def grainProcess(clip):
 
 def maskCreditProcess(clip, ranges = None):
 	creditMask = depth(vdf.drm(depth(src16, 8), nativeHeight, thr=60, expand=6), 16)
-	fixCredits = vstools.ranges.rfs(clip, core.std.MaskedMerge(clip, src16, creditMask), ranges)
+	fixCredits = replace_ranges(clip, core.std.MaskedMerge(clip, src16, creditMask), ranges)
 	return depth(fixCredits, 10)
 
 def filter():
-	denoise = denoiseProcess(src16)
-	rescale = rescaleProcess(denoise)
-	deband = debandProcess(rescale)
+	rescale = rescaleProcess(src16)
+	denoise = denoiseProcess(rescale)
+	deband = debandProcess(denoise)
 	grain = grainProcess(deband)
 	return maskCreditProcess(grain, creditRanges)
 
