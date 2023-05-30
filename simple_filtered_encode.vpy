@@ -44,7 +44,7 @@ def rescaleProcess(clip, strongAA: bool = False, optimizedAA: bool = False):
 	upscale = nnedi3_rpow2(antiAliasing)
 	downscale = muvf.SSIM_downsample(upscale, 1920, 1080)
 	rescaled = vdf.misc.merge_chroma(depth(downscale, 16), src16)
-	dehalo = haf.FineDehalo(rescaled, rx=2.4, darkstr=0.2, brightstr=0.8, thmi=44)
+	dehalo = haf.FineDehalo(rescaled, rx=2.4, darkstr=0, brightstr=0.8, thmi=44)
 	dering = haf.HQDeringmod(dehalo, mthr=24, nrmode=2, sharp=0, darkthr=0)
 	return dering
 
