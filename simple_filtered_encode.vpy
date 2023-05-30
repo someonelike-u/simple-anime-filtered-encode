@@ -18,6 +18,7 @@ from nnedi3_rpow2 import nnedi3_rpow2
 import havsfunc as haf
 from vsTAAmbk import TAAmbk
 import muvsfunc as muvf
+import vsaa
 
 core = vs.core
 src = core.lsmas.LWLibavSource(source=file)
@@ -30,10 +31,16 @@ def denoiseProcess(clip, strongDenoise: bool = False):
 		denoise = kgf.hybriddenoise(clip, 0.45, 1.5)
 	return denoise
 
-def rescaleProcess(clip, strongAA: bool = False):
+def rescaleProcess(clip, strongAA: bool = False, optimizedAA: bool = False):
 	luma = get_y(clip)
 	descale = kgf.inverse_scale(luma, height=nativeHeight, kernel='bicubic')
-	antiAliasing = TAAmbk(depth(descale, 16), aatype='Eedi3' if strongAA == True else 'Nnedi3')
+
+	if optimizedAA == True:
+		AAMask = vsaa.masked_clamp_aa(descale, strength=4, opencl=False)
+		AA = vsaa.upscaled_sraa(descale, rfactor=1.6)
+		antiAliasing = vsaa.clamp_aa(descale, AAMask, AA, strength=2)
+	else:
+		antiAliasing = TAAmbk(depth(descale, 16), aatype='Eedi3' if strongAA == True else 'Nnedi3')
 	upscale = nnedi3_rpow2(antiAliasing)
 	downscale = muvf.SSIM_downsample(upscale, 1920, 1080)
 	rescaled = vdf.misc.merge_chroma(depth(downscale, 16), src16)
