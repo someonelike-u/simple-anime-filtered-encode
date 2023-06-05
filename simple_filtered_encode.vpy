@@ -14,7 +14,7 @@ import vapoursynth as vs
 import kagefunc as kgf
 import vardefunc as vdf
 from vstools import depth, get_y, replace_ranges
-from nnedi3_rpow2 import nnedi3_rpow2
+from edi_rpow2 import znedi3_rpow2
 import havsfunc as haf
 from vsTAAmbk import TAAmbk
 import muvsfunc as muvf
@@ -41,7 +41,7 @@ def rescaleProcess(clip, strongAA: bool = False, optimizedAA: bool = False):
 		antiAliasing = vsaa.clamp_aa(descale, AAMask, AA, strength=2)
 	else:
 		antiAliasing = TAAmbk(depth(descale, 16), aatype='Eedi3' if strongAA == True else 'Nnedi3')
-	upscale = nnedi3_rpow2(antiAliasing)
+	upscale = znedi3_rpow2(antiAliasing, 2)
 	downscale = muvf.SSIM_downsample(upscale, 1920, 1080)
 	rescaled = vdf.misc.merge_chroma(depth(downscale, 16), src16)
 	dehalo = haf.FineDehalo(rescaled, rx=2.4, darkstr=0, brightstr=0.8, thmi=44)
