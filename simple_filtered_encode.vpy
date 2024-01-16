@@ -35,9 +35,9 @@ def rescaleProcess(clip, strongAA: bool = False, optimizedAA: bool = False):
 	descale = inverse_scale(luma, height=nativeHeight, kernel='bicubic')
 
 	if optimizedAA == True:
-		AAMask = vsaa.masked_clamp_aa(descale, strength=1, opencl=False)
-		strongAA = vsaa.upscaled_sraa(descale, rfactor=1.6)
-		antiAliased = vsaa.clamp_aa(descale, AAMask, strongAA, strength=1.5)
+		AAMask = masked_clamp_aa(descale, strength=1, opencl=False)
+		strongAA = upscaled_sraa(descale, rfactor=1.6)
+		antiAliased = clamp_aa(descale, AAMask, strongAA, strength=1.5)
 	else:
 		antiAliased = TAAmbk(depth(descale, 16), aatype='Eedi3' if strongAA == True else 'Nnedi3')
 	upscale = znedi3_rpow2(antiAliased, 2)
